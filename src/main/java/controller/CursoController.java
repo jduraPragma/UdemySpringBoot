@@ -2,9 +2,7 @@ package controller;
 
 import model.Curso;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -46,5 +44,28 @@ public class CursoController {
         }
 
         return auxList;
+    }
+
+    @DeleteMapping(value = "curso/{nombre}")
+    public void eliminarCurso(@PathVariable("nombre") String nombre){
+        cursos.removeIf(c -> c.getNombre().equals(nombre));
+    }
+
+    @PostMapping(value = "curso", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Curso> guardarCurso(@RequestBody Curso curso){
+        cursos.add(curso);
+        return cursos;
+    }
+
+    @PutMapping(value = "curso", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Curso> actualizarCurso(@RequestBody Curso curso){
+        for (int i = 0; i < cursos.size(); i++) {
+            if (cursos.get(i).getNombre().equals(curso.getNombre())){
+                cursos.set(i, curso);
+                break;
+            }
+        }
+
+        return cursos;
     }
 }
